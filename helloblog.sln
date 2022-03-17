@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{585DBC0F-C86
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Framework", "src\Blog.Framework\Blog.Framework.csproj", "{F8DB093D-A024-4773-9333-AE5E895B1A50}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Core", "Blog.Core\Blog.Core.csproj", "{C918FCC3-16F8-4F20-97CE-E425AA2BC9E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Core", "src\Blog.Core\Blog.Core.csproj", "{C918FCC3-16F8-4F20-97CE-E425AA2BC9E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Application", "Blog.Application\Blog.Application.csproj", "{759857F5-AF7D-4809-9A3F-0D52DDFB92AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Application", "src\Blog.Application\Blog.Application.csproj", "{759857F5-AF7D-4809-9A3F-0D52DDFB92AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Hosting", "Blog.Hosting\Blog.Hosting.csproj", "{D41B90B2-DFCD-4A8C-8B08-404A9E556649}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Hosting", "src\Blog.Hosting\Blog.Hosting.csproj", "{D41B90B2-DFCD-4A8C-8B08-404A9E556649}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
