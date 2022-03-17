@@ -18,18 +18,18 @@ string cacheProviderName = "default";
 
 var builder = WebApplication.CreateBuilder(args);
 
-//¸ü¸ÄÊÓÍ¼ÊµÊ±ÉúĞ§
+// æ›´æ”¹è§†å›¾å®æ—¶ç”Ÿæ•ˆ
 builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-    options.CheckConsentNeeded = context => false;//¹Ø±ÕGDPR¹æ·¶
+    options.CheckConsentNeeded = context => false;// å…³é—­GDPRè§„èŒƒ
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-//Ìí¼ÓSession ·şÎñ
+// æ·»åŠ  Session æœåŠ¡
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
@@ -39,29 +39,29 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-//×Ô¶¯×¢ÈëÅäÖÃ
+// è‡ªåŠ¨æ³¨å…¥é…ç½®
 builder.Services.AddConfig(builder.Configuration);
 
 builder.Services.AddMvc().AddNewtonsoftJson(opt =>
 {
-    //ºöÂÔÑ­»·ÒıÓÃ
+    // å¿½ç•¥å¾ªç¯å¼•ç”¨
     opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 
-    //²»¸Ä±ä×Ö¶Î´óĞ¡
+    // ä¸æ”¹å˜å­—æ®µå¤§å°
     opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
 
-//¼ÓÈëÄ£ĞÍÑéÖ¤
+// åŠ å…¥æ¨¡å‹éªŒè¯
 builder.Services.AddControllersWithViews().AddValidation();
-//×Ô¶¯Ä£ĞÍÓ³Éä
+// è‡ªåŠ¨æ¨¡å‹æ˜ å°„
 builder.Services.AddMapper();
-//builder.Services.AddAutoDependencyInjection();//×Ô¶¯×¢Èë£¨ºÍÏÂ·½Ê¹ÓÃAutofac×¢ÈëµÄ builder.RegisterModule<AutofacModule>(); ¶şÑ¡Ò»¼´¿É£©
+// builder.Services.AddAutoDependencyInjection();// è‡ªåŠ¨æ³¨å…¥ï¼ˆå’Œä¸‹æ–¹ä½¿ç”¨ Autofac æ³¨å…¥çš„ builder.RegisterModule<AutofacModule>(); äºŒé€‰ä¸€å³å¯ï¼‰
 
-#region »º´æÅäÖÃ
+#region ç¼“å­˜é…ç½®
 var sysConfig = builder.Services.BuildServiceProvider().GetService<IOptionsMonitor<SysConfig>>().CurrentValue;
 builder.Services.AddEasyCaching(options =>
 {
-    ////Ê¹ÓÃÎÄµµ https://easycaching.readthedocs.io/en/latest
+    // ä½¿ç”¨æ–‡æ¡£ https://easycaching.readthedocs.io/en/latest
     if (sysConfig.UseRedis)
     {
         options.UseCSRedis(builder.Configuration);
@@ -77,32 +77,32 @@ builder.Services.AddEasyCaching(options =>
 });
 #endregion
 
-#region Ê¹ÓÃAutofac×¢Èë
+#region ä½¿ç”¨ Autofac æ³¨å…¥
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(container => {
-    //×Ô¶¯×¢Èë
+    // è‡ªåŠ¨æ³¨å…¥
     container.RegisterModule<AutofacModule>();
 
-    //×Ô¶¯×¢Èëservice£¨ÒµÎñ²ã£©
+    // è‡ªåŠ¨æ³¨å…¥ serviceï¼ˆä¸šåŠ¡å±‚ï¼‰
     container.AutoRegisterService("service");
 
-    //Ê¹ÓÃAspectCore¼ÓÈë¶¯Ì¬´úÀí£¨À¹½ØÆ÷£©×¢£ºÇĞ¼ÇAutofac.Extensions.DependencyInjectionµÄnuget°ü±ØĞëÊÇ6.0°æ±¾£¬·ñÔò»á³öÒì³£
+    // ä½¿ç”¨ AspectCore åŠ å…¥åŠ¨æ€ä»£ç†ï¼ˆæ‹¦æˆªå™¨ï¼‰æ³¨ï¼šåˆ‡è®° Autofac.Extensions.DependencyInjection çš„ nuget åŒ…å¿…é¡»æ˜¯6.0ç‰ˆæœ¬ï¼Ÿå¦åˆ™ä¼šå‡ºå¼‚å¸¸ï¼
     container.AddAspectCoreInterceptor(x => x.CacheProviderName = cacheProviderName);
 });
 #endregion
 
-#region ÅäÖÃÊı¾İ¿âÁ¬½Ó
-//Ö§³Ö¶àÊı¾İÁ¬½Ó
+#region é…ç½®æ•°æ®åº“è¿æ¥
+// æ”¯æŒå¤šæ•°æ®è¿æ¥
 builder.Services.AddSqlSugarConnection(builder.Configuration);
 #endregion
 
-#region cookieÈ«¾ÖÉèÖÃ
-//ÉèÖÃÈÏÖ¤cookieÃû³Æ¡¢¹ıÆÚÊ±¼ä¡¢ÊÇ·ñÔÊĞí¿Í»§¶Ë¶ÁÈ¡
+#region cookie å…¨å±€è®¾ç½®
+// è®¾ç½®è®¤è¯ cookie åç§°ã€è¿‡æœŸæ—¶é—´ã€æ˜¯å¦å…è®¸å®¢æˆ·ç«¯è¯»å–
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
-    options.Cookie.Name = "appsoft";//cookieÃû³Æ
-    options.Cookie.HttpOnly = true;//²»ÔÊĞí¿Í»§¶Ë»ñÈ¡
-    options.SlidingExpiration = true;// ÊÇ·ñÔÚ¹ıÆÚÊ±¼ä¹ı°ëµÄÊ±ºò£¬×Ô¶¯ÑÓÆÚ
+    options.Cookie.Name = "appsoft";// cookie åç§°
+    options.Cookie.HttpOnly = true;// ä¸å…è®¸å®¢æˆ·ç«¯è·å–
+    options.SlidingExpiration = true;// æ˜¯å¦åœ¨è¿‡æœŸæ—¶é—´è¿‡åŠçš„æ—¶å€™ï¼Œè‡ªåŠ¨å»¶æœŸ
     options.ExpireTimeSpan = TimeSpan.FromHours(1);
 });
 #endregion
@@ -130,13 +130,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-//Ê¹ÓÃ¾²Ì¬AutofacÈİÆ÷
+// ä½¿ç”¨é™æ€ Autofac å®¹å™¨
 app.UseStaticContainer();
 
-//Òì³£´¦ÀíÖĞ¼ä¼ş
+// å¼‚å¸¸å¤„ç†ä¸­é—´ä»¶
 app.UseExceptionHandle();
 
-#region ½â¾öUbuntu Nginx ´úÀí²»ÄÜ»ñÈ¡IPÎÊÌâ
+#region è§£å†³ Ubuntu Nginx ä»£ç†ä¸èƒ½è·å–IPé—®é¢˜
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -146,7 +146,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
-#region Â·ÓÉÅäÖÃ
+#region è·¯ç”±é…ç½®
 
 app.UseEndpoints(endpoints =>
 {

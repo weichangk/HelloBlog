@@ -9,19 +9,19 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/App.Hosting/App.Hosting.csproj", "App.Hosting/"]
-COPY ["src/App.Application/App.Application.csproj", "App.Application/"]
-COPY ["src/App.Core/App.Core.csproj", "App.Core/"]
-COPY ["src/App.Framwork/App.Framwork.csproj", "App.Framwork/"]
-RUN dotnet restore "App.Hosting/App.Hosting.csproj"
+COPY ["src/Blog.Hosting/Blog.Hosting.csproj", "Blog.Hosting/"]
+COPY ["src/Blog.Application/Blog.Application.csproj", "Blog.Application/"]
+COPY ["src/Blog.Core/Blog.Core.csproj", "Blog.Core/"]
+COPY ["src/Blog.Framework/Blog.Framework.csproj", "Blog.Framework/"]
+RUN dotnet restore "Blog.Hosting/Blog.Hosting.csproj"
 COPY . .
-WORKDIR "/src/src/App.Hosting"
-RUN dotnet build "App.Hosting.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Blog.Hosting"
+RUN dotnet build "Blog.Hosting.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "App.Hosting.csproj" -c Release -o /app/publish
+RUN dotnet publish "Blog.Hosting.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "App.Hosting.dll"]
+ENTRYPOINT ["dotnet", "Blog.Hosting.dll"]

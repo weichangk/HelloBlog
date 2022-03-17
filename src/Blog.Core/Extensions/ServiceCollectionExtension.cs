@@ -20,6 +20,12 @@ namespace Blog.Core.Extensions
             var configs = configuration.GetSection(section).Get<List<ConnectionConfig>>();
             foreach (var item in configs)
             {
+                // 改用环境变量配置方便容器部署
+                var db = configuration["DBNAME"] ?? "appsoft";
+                var host = configuration["DBHOST"] ?? "localhost";
+                var port = configuration["DBPORT"] ?? "3306";
+                var pwd = configuration["DBPWD"] ?? "123456";
+                item.ConnectionString = $"Server={host};User Id=root;Password={pwd};Port={port};Database={db};Allow User Variables=True";
                 item.ConfigureExternalServices = new ConfigureExternalServices
                 {
                     //配置ORM缓存
