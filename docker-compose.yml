@@ -1,52 +1,49 @@
-version: '3.8'
-
-networks:
-  blogfrontend:
-  blogbackend:
-
-volumes:
-  blogdata:
+version: '3.7'
 
 services:
-  blogmysql:
-    restart: always
+  mysql:
     image: "mysql:latest"
     ports:
       - 3307:3306
     volumes:
       - blogdata:/var/lib/mysql
     networks:
-      - blogbackend
+      - backend
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       BIND-ADDRESS: 0.0.0.0
     command:
       --lower_case_table_names=1
 
-  blogweb:
-    restart: always
+  web:
     build: 
       context: .
       dockerfile: Dockerfile
     networks:
-      - blogbackend
-      - blogfrontend
+      - backend
+      - frontend
     environment:
       DBNAME: appsoft
-      DBHOST: blogmysql
+      DBHOST: mysql
       DBPORT: 3306
       DBPWD: 123456
     depends_on:
-      - blogmysql
+      - mysql
 
   balance:
-    restart: always
     image: dockercloud/haproxy:1.2.1
     ports:
-      - 9000:80
+      - 9999:80
     links:
-      - blogweb
+      - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - blogfrontend
+      - frontend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  blogdata:
