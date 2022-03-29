@@ -36,13 +36,19 @@
 
 #### 部署
 使用 jenkins，使用 docker-compose 结合 .env 环境变量配置进行部署
-生产环境部署只要指定生产环境变量配置文件 .env 路径即可。防止了生产环境隐私配置上传到代码仓库
+生产环境部署只要指定生产环境变量配置文件 prod.env 路径即可。防止了生产环境隐私配置上传到代码仓库
 首次部署成功后需要连接数据库客户端创建数据库执行数据库脚本生成appsoft数据库（后续找下在部署脚本中执行数据库脚本方案）
 
 docker-compose 部署脚本
 ```shell
 docker-compose -f docker-compose.yml -p hellobolg down
-docker-compose -f docker-compose.yml -p hellobolg --env-file ./.env up --detach
+docker-compose -f docker-compose.yml -p hellobolg --env-file .env up --detach
+#docker-compose -f docker-compose.yml -p hellobolg --env-file prod.env up --detach
 ```
+
+
+问题
+在服务器上 jenkins 部署执行指令的时候指定目录的 prod.env 找不到，jenkins 是在工作空间目录下找的，
+发现在 jenkins 挂载目录下有对应构建任务的工作区目录 /var/lib/docker/volumes/jenkins_home/_data/workspace/helloblog 将 prod.env 放置工作区目录即可
 
 
