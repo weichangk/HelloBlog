@@ -4,13 +4,15 @@ services:
   db:
     image: "mysql:8.0.0"
     ports:
-      - 3316:3306
+      - ${DB_PORT}:3306
     volumes:
-      - data:/var/lib/mysql
+      - type: bind
+        source: ${DB_VOLUME_SOURCE}
+        target: /var/lib/mysql
     networks:
       - backend
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       BIND-ADDRESS: 0.0.0.0
     command:
       --lower_case_table_names=1
@@ -20,18 +22,22 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 9999:80
+      - ${WEB_PORT}:80
+    volumes:
+      - type: bind
+        source: ${WEB_VOLUME_APPSETTINGS_SOURCE}
+        target: /app/appsettings.json
+      - type: bind
+        source: ${WEB_VOLUME_LOGS_SOURCE}
+        target: /app/Logs
     networks:
       - backend
     environment:
       DBNAME: appsoft
       DBHOST: db
       DBPORT: 3306
-      DBPWD: 123456
+      DBPWD: ${DB_PASSWORD}
     depends_on:
       - db
 networks:
   backend:
-
-volumes:
-  data:

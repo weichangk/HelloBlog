@@ -34,14 +34,15 @@
 
 
 
-#### sdsds
-使用 jenkins 部署
-执行 docker-compose 脚本后 会创建数据库容器服务，但是还没有appsoft数据库，需要执行数据库脚本生成appsoft数据库
+#### 部署
+使用 jenkins，使用 docker-compose 结合 .env 环境变量配置进行部署
+生产环境部署只要指定生产环境变量配置文件 .env 路径即可。防止了生产环境隐私配置上传到代码仓库
+首次部署成功后需要连接数据库客户端创建数据库执行数据库脚本生成appsoft数据库（后续找下在部署脚本中执行数据库脚本方案）
 
-docker-compose 脚本
+docker-compose 部署脚本
 ```shell
-docker-compose -f Docker-Compose.yml -p hellobolg down
-docker-compose -f Docker-Compose.yml -p hellobolg build
-docker-compose -f Docker-Compose.yml -p hellobolg up --detach
+docker-compose -f docker-compose.yml -p hellobolg down
+docker-compose -f docker-compose.yml -p hellobolg --env-file ./.env up --detach
 ```
+
 
