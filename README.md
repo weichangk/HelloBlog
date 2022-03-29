@@ -31,3 +31,17 @@
 后台预览![后台预览](https:// "后台管理系统.png")
 
 如果有什么 BUG 还希望大家提交到 Issues，我看到会及时修复。
+
+
+
+#### sdsds
+使用 jenkins 部署
+执行 docker-compose 脚本后 会创建数据库容器服务，但是还没有appsoft数据库，需要执行数据库脚本生成appsoft数据库
+
+docker-compose 脚本
+```shell
+docker-compose -f Docker-Compose.yml -p hellobolg down
+docker-compose -f Docker-Compose.yml -p hellobolg build
+docker-compose -f Docker-Compose.yml -p hellobolg up --detach
+```
+

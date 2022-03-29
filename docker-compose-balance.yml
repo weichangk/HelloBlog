@@ -1,12 +1,12 @@
 version: '3.7'
 
 services:
-  db:
+  mysql:
     image: "mysql:8.0.0"
     ports:
       - 3316:3306
     volumes:
-      - data:/var/lib/mysql
+      - blogdata:/var/lib/mysql
     networks:
       - backend
     environment:
@@ -19,19 +19,31 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    ports:
-      - 9999:80
     networks:
       - backend
+      - frontend
     environment:
       DBNAME: appsoft
-      DBHOST: db
+      DBHOST: mysql
       DBPORT: 3306
       DBPWD: 123456
     depends_on:
-      - db
+      - mysql
+
+  balance:
+    image: dockercloud/haproxy:1.2.1
+    ports:
+      - 9999:80
+    links:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - frontend
+
 networks:
+  frontend:
   backend:
 
 volumes:
-  data:
+  blogdata:
