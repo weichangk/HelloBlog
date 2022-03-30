@@ -41,8 +41,9 @@
 
 docker-compose 部署脚本
 ```shell
-docker-compose -f docker-compose.yml -p hellobolg down
+docker-compose -f docker-compose.yml -p hellobolg --env-file .env down
 docker-compose -f docker-compose.yml -p hellobolg --env-file .env up --detach
+#docker-compose -f docker-compose.yml -p hellobolg --env-file prod.env down
 #docker-compose -f docker-compose.yml -p hellobolg --env-file prod.env up --detach
 ```
 
